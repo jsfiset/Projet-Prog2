@@ -13,68 +13,58 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-public class Frog extends MovableObject implements ActionListener, KeyListener {
-	
-	
+public class Frog extends MovableObject  {
 
-	private int x,y,direction;
+	private int direction;
+	BufferedImage sprite;
 
-	public Frog(BufferedImage sprite) { // créé un objet grenouille ayant pour
-										// position
-		// de départ les coordonées
-
-		MovingObject = sprite.getSubimage(200, 400, 300, 75).getScaledInstance(280, 55, Image.SCALE_DEFAULT);
+	public Frog() {
 		
-		JLabel Grenouille = new JLabel(new ImageIcon(this.MovingObject));
-
-
-		Grenouille.setFocusable(true);
-		Grenouille.addKeyListener(this);
+		try {
+			sprite = ImageIO.read(new File("src/resources/sprite.png"));
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+		MovingObject = sprite.getSubimage(0, 0, 50,75).getScaledInstance(80, 90, Image.SCALE_DEFAULT);
+		//JLabel Grenouille = new JLabel(new ImageIcon(MovingObject));
+		
+		//Grenouille.setFocusable(true);
+		//Grenouille.setOpaque(false);
 
 	}
 
+	public int getX() {
+		return posX;
+	}
+
+	public int getY() {
+		return posY;
+	}
+
+	public int getDirection() {
+		return direction;
+	}
+
 	@Override
-	void move(int x, int y) {
+	public void move(int x, int y) {
 		this.posX = x;
 		this.posY = y;
 
 	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		int code = e.getKeyCode();
-		if (code == KeyEvent.VK_UP) {
-			move(posX, posY++);
-		}
-		if (code == KeyEvent.VK_RIGHT) {
-			move(posX++, posY);
-		}
-		if (code == KeyEvent.VK_LEFT) {
-			move(posX--, posY);
-		}
-		if (code == KeyEvent.VK_DOWN) {
-			move(posX, posY--);
-		}
-	}
-
+	//il faut s'assurer que le mouvement de la grenouille se fait avec le bon nombre de pixels par rapport au GameFrame.
 	
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+	void up(){
 		
+		move(posX,posY-GAP_BETWEEN_LANES);
 	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+	void down(){
+		move(posX,posY+GAP_BETWEEN_LANES);
+	}	
+	void right(){
+		move(posX+LEFT_RIGHT_SHIFT,posY);
+	}	
+	void left(){
+		move(posX-LEFT_RIGHT_SHIFT,posY);
 	}
 
 }
